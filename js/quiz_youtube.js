@@ -3,51 +3,39 @@ const resultsContainer = document.getElementById('results');
 const submitButton = document.getElementById('submit');
 const myQuestions = [
     {
-      question: "Who invented JavaScript?",
+      question: "Ton clash préféré",
       answers: {
-        a: "Douglas Crockford",
-        b: "Sheryl Sandberg",
-        c: "Brendan Eich"
+        a:{
+          text: "Luigi clash Mario",
+          src: "img/emblemicons_png_72px_alert-circle-fill.png",
+          ctg: "luigi_norman"
+        },
+        b:{
+          text: "Cyprien clash Cortex",
+          src: "img/emblemicons_png_72px_calendar-date-fill.png",
+          ctg: "cyprien_cortex"
+        },
       },
-      correctAnswer: "c"
     },
-    {
-      question: "Which one of these is a JavaScript package manager?",
-      answers: {
-        a: "Node.js",
-        b: "TypeScript",
-        c: "npm"
-      },
-      correctAnswer: "c"
-    },
-    {
-      question: "Which tool can you use to ensure code quality?",
-      answers: {
-        a: "Angular",
-        b: "jQuery",
-        c: "RequireJS",
-        d: "ESLint"
-      },
-      correctAnswer: "d"
-    }
   ];
   
 function buildQuiz(){
     const output = [];
     myQuestions.forEach(
         (currentQuestion,questionNumber)=>{
-            const answers = [];
+          const choices = [];
             for(letter in currentQuestion.answers){
-                answers.push(
+                choices.push(
                     `<label>
-                        <input type="radio" name="question${questionNumber}" value="${letter}">
-                        ${currentQuestion.answers[letter]}
-                    <label>`
+                        <input type="radio" name="question${questionNumber}" value="${currentQuestion.answers[letter].ctg}">
+                        <img src=${currentQuestion.answers[letter].src}>
+                        <div>${currentQuestion.answers[letter].text}</div>
+                    </label>`
                 );
             }
             output.push(
                 `<div class="question"> ${currentQuestion.question} </div>
-                <div class="answers"> ${answers.join('')} </div>`
+                <div class="answers"> ${choices.join('')} </div>`
             );
         } 
     );
@@ -56,22 +44,26 @@ function buildQuiz(){
 
 function showResults(){
     const answerContainers = quizContainer.querySelectorAll('.answers');
-    let numCorrect = 0;
+    let luigi_norman = 0;
+    let cyprien_cortex = 0;
+    let corres_song = 0;
     myQuestions.forEach((currentQuestion, questionNumber)=>{
         const answerContainer = answerContainers[questionNumber];
         const selector = `input[name=question${questionNumber}]:checked`;
         const userAnswer = (answerContainer.querySelector(selector) || {}).value;
 
-        if(userAnswer === currentQuestion.correctAnswer){
-            numCorrect++;
-            answerContainers[questionNumber].style.color='lighgreen';
+        if(userAnswer === "luigi_norman"){
+            luigi_norman++;
+        }else if(userAnswer === "cyprien_cortex"){
+            cyprien_cortex++;
         }
-
-        else{
-            answerContainers[questionNumber].style.color='red';
+        if(luigi_norman>cyprien_cortex){
+          corres_song = "luigi_norman";
+        }else if(cyprien_cortex>luigi_norman){
+          corres_song = "cyprien_cortex";
         }
     });
-    resultsContainer.innerHTML = `${numCorrect} out of ${myQuestions.length}`;
+    resultsContainer.innerHTML = `tu corresponds à ${corres_song}`;
 }
 
 buildQuiz();
